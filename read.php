@@ -1,6 +1,6 @@
 <?php
 
-// stdbuf -i0 -o0 -e0 bash yada.sh | tee -a /tmp/zap ; echo "Fini" >> /tmp/zap
+// echo "Start" >> /tmp/zap ; stdbuf -i0 -o0 -e0 bash yada.sh | tee -a /tmp/zap ; echo "Fini" >> /tmp/zap
 
 $start = $_GET['start'] ?? 1;
 $limit = $_GET['limit'] ?? -1;
