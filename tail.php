@@ -7,6 +7,16 @@ $limit = $_GET['limit'] ?? 0;
 $file = $_GET['file'] ?? null;
 
 if ( !file_exists($file) ) die("File not found");
+
+if ( strlen($_POST['reset_shell_out'] ?? '') > 0 ) {
+    exec("rm /tmp/shellout");
+    exec("touch /tmp/shellout");
+    $_SESSION['success'] = "Shell output reset, make sure to reset your tail of shell output";
+    header("Location: tail.php?file=".$file);
+    return;
+}
+
+
 ?>
 <style>
 ol {
@@ -37,12 +47,15 @@ content > div {
 <body>
 <main>
   <header>
-  File: <?= htmlentities($file) ?>
-
 <input type="text" id="search" onkeydown="if (event.key == 'Enter') doSearch();"}>
 <button onclick="doSearch(); return false;">Search</button>
 <button onclick="document.getElementById('search').value=''; doSearch(); return false;">Clear</button>
 Scroll: <input type="checkbox" checked id="scroll">
+<form method="POST">
+<input type="submit" name="reset_shell_out" value="Reset Output">
+  File: <?= htmlentities($file) ?>
+
+</form>
   </header>
   <content>
   <ol id="tail" start="<?= $start ?>">
