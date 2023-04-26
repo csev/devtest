@@ -14,7 +14,8 @@ $shown = 0;
 
 while (($line = fgets($fp)) !== false) {
     if ( $pos >= $start ) {
-        array_push($pos, rtrim($line));
+        $thing = array($pos, $line);
+        array_push($thing);
         $lines[$pos] = $line;
         $shown++;
         if ( $limit > 0 && $shown >= $limit ) break;

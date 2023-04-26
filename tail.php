@@ -39,9 +39,10 @@ content > div {
   <header>
   File: <?= htmlentities($file) ?>
 
-<input type="text" id="search">
+<input type="text" id="search" onkeydown="if (event.key == 'Enter') doSearch();"}>
 <button onclick="doSearch(); return false;">Search</button>
 <button onclick="document.getElementById('search').value=''; doSearch(); return false;">Clear</button>
+Scroll: <input type="checkbox" checked id="scroll">
   </header>
   <content>
   <ol id="tail" start="<?= $start ?>">
@@ -61,14 +62,15 @@ function doTail() {
           var temp = document.createElement('li');
           temp.innerText = data.lines[key];
 
+          const scroll = document.getElementById('scroll').checked;
           const str = document.getElementById('search').value;
-          // console.log('search', str);
-          if ( str.length > 0 && temp.innerText.includes(str) ) {
-              temp.style.backgroundColor = 'lightgrey';
+          if ( str.length > 0 && temp.innerText.toLowerCase().includes(str.toLowerCase()) ) {
+              temp.style.backgroundColor = 'green';
           } else {
               temp.style.backgroundColor = 'white';
           }
           document.getElementById("tail").appendChild(temp);
+          if ( scroll ) temp.scrollIntoView(false);
       })
       pos = data.next;
       setTimeout(doTail, 5000);
@@ -82,8 +84,9 @@ function doSearch() {
     const parent = document.getElementById('tail');
     Array.from(parent.children).forEach((child, index) => {
         // console.log(index, child.innerText);
-        if ( str.length > 0 && child.innerText.includes(str) ) {
-            child.style.backgroundColor = 'lightgrey';
+        if ( str.length > 0 && child.innerText.toLowerCase().includes(str.toLowerCase()) ) {
+            child.style.backgroundColor = 'green';
+            child.scrollIntoView(false);
         } else {
             child.style.backgroundColor = 'white';
         }
