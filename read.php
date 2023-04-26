@@ -1,5 +1,7 @@
 <?php
 
+// stdbuf -i0 -o0 -e0 bash yada.sh | tee -a /tmp/zap ; echo "Fini" >> /tmp/zap
+
 $start = $_GET['start'] ?? 0;
 $file = $_GET['file'] ?? null;
 

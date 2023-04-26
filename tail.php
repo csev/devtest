@@ -16,6 +16,7 @@ li::marker {
 <ol id="tail">
 </ol>
 <script>
+// stdbuf -i0 -o0 -e0 bash yada.sh | tee -a /tmp/zap ; echo "Fini" >> /tmp/zap
 var pos = 0;
 function doTail() {
   fetch('read.php?file=/tmp/zap&start='+pos)
@@ -25,14 +26,14 @@ function doTail() {
       Object.keys(data.lines).forEach(function(key) {
           console.log('Key : ' + key + ', Value : ' + data.lines[key])
           var temp = document.createElement('li');
-          temp.innerHTML = data.lines[key];
+          temp.innerText = data.lines[key];
           document.getElementById("tail").appendChild(temp);
       })
       pos = data.next;
       setTimeout(doTail, 5000);
     });
 }
-setTimeout(doTail, 1000);
+setTimeout(doTail, 500);
 </script>
 </body>
 </html>
