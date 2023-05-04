@@ -8,19 +8,6 @@ $file = $_GET['file'] ?? null;
 
 if ( !file_exists($file) ) die("File not found");
 
-$fp = fopen($file, 'r');
-$pos = 1;
-while (($line = fgets($fp)) !== false) {
-    if ( $pos >= $start ) {
-        $thing = array($pos, $line);
-        array_push($thing);
-        $lines[$pos] = $line;
-        $shown++;
-        if ( $limit > 0 && $shown >= $limit ) break;
-    }
-    $pos++;
-}
-
 if ( strlen($_POST['reset_shell_out'] ?? '') > 0 ) {
     exec("rm /tmp/shellout");
     exec("touch /tmp/shellout");
@@ -76,15 +63,20 @@ Auto Scroll: <input type="checkbox" checked id="scroll">
 <?php
 $fp = fopen($file, 'r');
 $pos = 1;
-if ( $limit < 10000) $limit = 10000;
+$shown = 0;
+if ( $limit < 1) $limit = 10000;
 
 while (($line = fgets($fp)) !== false) {
-    echo('<li style="background-color: white;">');
-    echo(trim($line));
-    // https://css-tricks.com/fighting-the-space-between-inline-block-elements/
-    echo("<br/></li\n>");
+    if ( $pos >= $start ) {
+        echo('<li style="background-color: white;">');
+        echo(trim($line));
+        // https://css-tricks.com/fighting-the-space-between-inline-block-elements/
+        echo("<br/></li\n>");
+        $shown++;
+    }
     $pos++;
-    // if ( $pos > 2 ) break; // Test
+    if ( $limit > 0 && $shown >= $limit ) break;
+
 }
 ?>
 </ol>
