@@ -11,6 +11,7 @@ $lines = array();
 $fp = fopen($file, 'r');
 $pos = 1;
 $shown = 0;
+if ( $limit < 10000) $limit = 10000;
 
 while (($line = fgets($fp)) !== false) {
     if ( $pos >= $start ) {

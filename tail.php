@@ -8,6 +8,19 @@ $file = $_GET['file'] ?? null;
 
 if ( !file_exists($file) ) die("File not found");
 
+$fp = fopen($file, 'r');
+$pos = 1;
+while (($line = fgets($fp)) !== false) {
+    if ( $pos >= $start ) {
+        $thing = array($pos, $line);
+        array_push($thing);
+        $lines[$pos] = $line;
+        $shown++;
+        if ( $limit > 0 && $shown >= $limit ) break;
+    }
+    $pos++;
+}
+
 if ( strlen($_POST['reset_shell_out'] ?? '') > 0 ) {
     exec("rm /tmp/shellout");
     exec("touch /tmp/shellout");
@@ -38,10 +51,6 @@ header {
   background: lightblue;
   text-align: center;
 }
-
-content > div {
-  height: 50px;
-}
 </style>
 </head>
 <body>
@@ -50,7 +59,7 @@ content > div {
 <input type="text" id="search" onkeydown="if (event.key == 'Enter') doSearch();"}>
 <button onclick="doSearch(); return false;">Search</button>
 <button onclick="document.getElementById('search').value=''; doSearch(); return false;">Clear</button>
-Scroll: <input type="checkbox" checked id="scroll">
+Auto Scroll: <input type="checkbox" checked id="scroll">
 <form method="POST">
 <input type="submit" name="reset_shell_out" value="Reset Output">
   File: <?= htmlentities($file) ?>
@@ -60,6 +69,22 @@ Scroll: <input type="checkbox" checked id="scroll">
   <content>
   <ol id="tail" start="<?= $start ?>">
 </ol>
+<?php
+$fp = fopen($file, 'r');
+$pos = 1;
+$shown = 0;
+if ( $limit < 10000) $limit = 10000;
+
+while (($line = fgets($fp)) !== false) {
+    if ( $pos >= $start ) {
+        $thing = array($pos, $line);
+        array_push($thing);
+        $lines[$pos] = $line;
+        $shown++;
+        if ( $limit > 0 && $shown >= $limit ) break;
+    }
+    $pos++;
+}
 </content>
 </main>
 <script>
@@ -69,9 +94,7 @@ function doTail() {
     fetch('read.php?file=<?= $file ?>&start='+pos+'&limit='+<?= $limit ?>)
     .then(response => response.json())
     .then(data => {
-      console.log(data);
       Object.keys(data.lines).forEach(function(key) {
-          console.log('Key : ' + key + ', Value : ' + data.lines[key])
           var temp = document.createElement('li');
           temp.innerText = data.lines[key];
 
@@ -93,10 +116,8 @@ setTimeout(doTail, 500);
 
 function doSearch() {
     const str = document.getElementById('search').value;
-    // console.log('search', str);
     const parent = document.getElementById('tail');
     Array.from(parent.children).forEach((child, index) => {
-        // console.log(index, child.innerText);
         if ( str.length > 0 && child.innerText.toLowerCase().includes(str.toLowerCase()) ) {
             child.style.backgroundColor = 'green';
             child.scrollIntoView(false);
