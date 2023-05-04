@@ -8,7 +8,7 @@ $file = $_GET['file'] ?? null;
 
 if ( !file_exists($file) ) die("File not found");
 
-if ( strlen($_POST['reset_shell_out'] ?? '') > 0 ) {
+if ( $file == "/tmp/shellout" && strlen($_POST['reset_shell_out'] ?? '') > 0 ) {
     exec("rm /tmp/shellout");
     exec("touch /tmp/shellout");
     $_SESSION['success'] = "Shell output reset, make sure to reset your tail of shell output";
@@ -53,7 +53,9 @@ header {
 <button onclick="document.getElementById('search').value=''; doSearch(); return false;">Clear</button>
 Auto Scroll: <input type="checkbox" checked id="scroll">
 <form method="POST">
+<?php if ( $file == "/tmp/shellout" ) { ?>
 <input type="submit" name="reset_shell_out" value="Reset Output">
+<?php } ?>
   File: <?= htmlentities($file) ?>
 
 </form>
@@ -80,6 +82,7 @@ while (($line = fgets($fp)) !== false) {
 }
 ?>
 </ol>
+<span id="the_end"></span>
 </content>
 </main>
 <script>
@@ -122,6 +125,7 @@ function doSearch() {
     });
 }
 document.getElementById('search').value='';
+document.getElementById('the_end').scrollIntoView(false);
 </script>
 </body>
 </html>
