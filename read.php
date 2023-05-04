@@ -19,16 +19,16 @@ while (($line = fgets($fp)) !== false) {
         array_push($thing);
         $lines[$pos] = $line;
         $shown++;
-        if ( $limit > 0 && $shown >= $limit ) break;
     }
     $pos++;
+    // if ( $limit > 0 && $shown >= $limit ) break; // test
 }
 
 header('Content-Type: application/json');
 
 $retval = new \stdClass();
 $retval->lines = $lines;
-$retval->next = $pos+1;
+$retval->next = $pos;
 
 echo(json_encode($retval));
 

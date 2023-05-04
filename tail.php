@@ -37,6 +37,10 @@ ol {
   white-space: pre;
 }
 
+li {
+padding-bottom: 0;
+}
+
 li::marker {
   font-size: 10px;
   color: grey;
@@ -44,6 +48,7 @@ li::marker {
 main {
   padding: 0;
 }
+
 header {
   position: sticky;
   top:0;
@@ -67,29 +72,27 @@ Auto Scroll: <input type="checkbox" checked id="scroll">
 </form>
   </header>
   <content>
-  <ol id="tail" start="<?= $start ?>">
-</ol>
+<ol id="tail" start="<?= $start ?>">
 <?php
 $fp = fopen($file, 'r');
 $pos = 1;
-$shown = 0;
 if ( $limit < 10000) $limit = 10000;
 
 while (($line = fgets($fp)) !== false) {
-    if ( $pos >= $start ) {
-        $thing = array($pos, $line);
-        array_push($thing);
-        $lines[$pos] = $line;
-        $shown++;
-        if ( $limit > 0 && $shown >= $limit ) break;
-    }
+    echo('<li style="background-color: white;">');
+    echo(trim($line));
+    // https://css-tricks.com/fighting-the-space-between-inline-block-elements/
+    echo("<br/></li\n>");
     $pos++;
+    // if ( $pos > 2 ) break; // Test
 }
+?>
+</ol>
 </content>
 </main>
 <script>
 // stdbuf -i0 -o0 -e0 bash yada.sh | tee -a /tmp/zap ; echo "Fini" >> /tmp/zap
-var pos = <?= $start ?>;
+var pos = <?= $pos ?>;
 function doTail() {
     fetch('read.php?file=<?= $file ?>&start='+pos+'&limit='+<?= $limit ?>)
     .then(response => response.json())
