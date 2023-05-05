@@ -66,7 +66,6 @@ Auto Scroll: <input type="checkbox" checked id="scroll">
 $fp = fopen($file, 'r');
 $pos = 1;
 $shown = 0;
-if ( $limit < 1) $limit = 10000;
 
 while (($line = fgets($fp)) !== false) {
     if ( $pos >= $start ) {

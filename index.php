@@ -65,6 +65,13 @@ if ( strlen($_POST['git_repo'] ?? '') > 0 && strlen($_POST['repo_name'] ?? '') >
     return;
 }
 
+if ( strlen($_POST['git_main'] ?? '') > 0 ) {
+    $cmd = "cd ".$CFG['sakaihome']."; nohup ./wrap.sh 'bash co.sh https://github.com/sakaiproject/sakai' > /dev/null &";
+    execute($cmd);
+    header("Location: index.php");
+    return;
+}
+
 if ( strlen($_POST['note'] ?? '') > 0 ) {
     file_put_contents("note.txt", $_POST['note']);
     header("Location: index.php");
@@ -124,12 +131,28 @@ if ( strlen($_POST['new_property'] ?? '') > 0 && strlen($_POST['change_property'
     }
 
     $props = file_get_contents($propfile);
-    echo("<pre>\n");echo($props);echo("\n</pre>\n");
+    // echo("<pre>\n");echo($props);echo("\n</pre>\n");
 
     $key = substr($new_prop, 0, $pos);
 
+    // Find the start of the property
     $pos = strpos($props, $key."=");
-    die("key $key Pos $pos");
+    if ( $pos !== false ) {
+        $pos2 = strpos($props, "\n", $pos);
+        if ( $pos2 === false ) {
+            $props = substr($props, 0, $pos) . $new_prop . "\n";
+            $_SESSION['success'] = "Property updated at the end of the file";
+        } else {
+            $props = substr($props, 0, $pos) . $new_prop . substr($props, $pos2);
+            $_SESSION['success'] = "Property updated";
+        }
+    } else {
+       $_SESSION['success'] = "Property added at the end of the file";
+        $props = $props . "\n" . $new_prop . "\n";
+    }
+    // echo("<pre>\n");echo($props);echo("\n</pre>\n");
+    file_put_contents($propfile, $props);
+
     header("Location: index.php");
     return;
 }
@@ -173,6 +196,9 @@ if ( strlen($_SESSION['success'] ?? '' ) > 0 ) {
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
 </li>
 <li><input type="submit" name="git_remotes" value="Show Remotes in Sakai Folder">
+<a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
+</li>
+<li><input type="submit" name="git_main" value="Checkout the main Sakai repository">
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
 </li>
 <li>
