@@ -244,7 +244,13 @@ if ( strlen($_SESSION['success'] ?? '' ) > 0 ) {
 </li>
 </ul>
 </form>
-
-
+<p>
+Running tail on a large and rapidly growing file can slow your browser down.  If you wait, things will work themselves out.
+But if you want to use your browser while doing a compile or starting Tomcat, just close the tail tab, and check every 30 seconds
+or so by re-launching tail to see if it is done and then closing the tail tab.  Dynamically updating an &lt;ol&gt; tag to get pretty
+line numbers and nice highlight / select behavior seems to be costly when there are 20,000+ &lt;li&gt; tags in the list :).  And
+resetting a tail whilst a command is running will lose the rest of the output.  Just close the tab and re-open from
+time to time, or lect your browser be slugginsh for a bit :)
+</p>
 </body>
 </html>
