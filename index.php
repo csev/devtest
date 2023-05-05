@@ -178,12 +178,16 @@ if ( strlen($_SESSION['success'] ?? '' ) > 0 ) {
 
 <h1>Sakai Test Harness</h1>
 <form method="POST">
+<p>
+Last note update:
+<?php echo($lastupdate); ?>
+<br/>
 <textarea name="note" style="width:70%;">
 <?php echo(htmlentities($note)); ?>
 </textarea>
-<p>Enter a note above to let folks know when you are using this system and when you will be done.
+<br/>
+Enter a note above to let folks know when you are using this system and when you will be done.
 <input type="submit" name="new_note" value="Update note">
-<?php echo($lastupdate); ?>
 </p>
 </form>
 <form method="POST">
@@ -232,7 +236,7 @@ if ( strlen($_SESSION['success'] ?? '' ) > 0 ) {
 </li>
 <hr/>
 <li><input type="submit" name="tomcat_new" value="Set up fresh Tomcat">
-(Make sure to stop first)
+Make sure to stop Tomcart first.  This will resest any properties you have added.
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
 </li>
 <li><input type="submit" name="database_new" value="Reset the Database">
@@ -247,7 +251,10 @@ if ( strlen($_SESSION['success'] ?? '' ) > 0 ) {
 <p>
 Running tail on a large and rapidly growing file can slow your browser down.  If you wait, things will work themselves out.
 But if you want to use your browser while doing a compile or starting Tomcat, just close the tail tab, and check every 30 seconds
-or so by re-launching tail to see if it is done and then closing the tail tab.  Dynamically updating an &lt;ol&gt; tag to get pretty
+or so by re-launching tail to see if it is done and then closing the tail tab.
+</p>
+<p>
+Dynamically updating an &lt;ol&gt; tag to get pretty
 line numbers and nice highlight / select behavior seems to be costly when there are 20,000+ &lt;li&gt; tags in the list :).  And
 resetting a tail whilst a command is running will lose the rest of the output.  Just close the tab and re-open from
 time to time, or lect your browser be slugginsh for a bit :)
