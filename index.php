@@ -229,7 +229,7 @@ Enter a note above to let folks know when you are using this system and when you
 <li><input type="submit" name="tomcat_start" value="Start Tomcat">
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a> |
 <a href="tail.php?file=<?= $CFG['sakaihome'] ?>/apache-tomcat-9.0.21/logs/catalina.out" target="catalina">Tail catalina.out</a></li>
-<li><a href="http://localhost:8080/" target="_new">Launch Sakai in a Browser</a>
+<li><a href="<?= $CFG['sakaiserver'] ?>" target="_new">Launch Sakai in a Browser</a>
 </li>
 <li><input type="submit" name="tomcat_stop" value="Stop Tomcat">
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>

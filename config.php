@@ -4,5 +4,6 @@ global $CFG;
 
 $CFG = array();
 
-$CFG['sakaihome'] = '/Users/csev/sakai/scripts';
+$CFG['sakaihome'] = '/var/www/sakai-scripts';
+$CFG['sakaiserver'] = 'https://qasak.sakaicloud.com';
 
