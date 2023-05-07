@@ -106,7 +106,6 @@ Switch back to `root` and set up virtual hosting and HTTP proxy in Apache:
         ProxyPassReverse / http://127.0.0.1:8080/
     </VirtualHost>
 
-
     a2ensite qasak.sakaicloud.com
     systemctl reload apache2
 
@@ -115,7 +114,7 @@ Switch back to `root` and set up virtual hosting and HTTP proxy in Apache:
 
 Then set up two domains to point to the server:
 
-    https://devtest.sakaicloud.com/ ==> 67.205.132.116
+    https://qadev.sakaicloud.com/ ==> 67.205.132.116
     https://qasak.sakaicloud.com/ ==> 67.205.132.116
 
 I use CloudFlare for DNS, DDOS, and proxy so it handles certificates for me.

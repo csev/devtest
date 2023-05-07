@@ -256,7 +256,7 @@ Enter a note above to let folks know when you are using this system and when you
 </li>
 <hr/>
 <li><input type="submit" name="tomcat_new" value="Set up fresh Tomcat">
-Make sure to stop Tomcart first.  This will resest any properties you have added.
+Make sure to stop Tomcat first.  This will resest any properties you have added.
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
 </li>
 <li><input type="submit" name="database_new" value="Reset the Database">
