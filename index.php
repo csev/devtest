@@ -215,6 +215,8 @@ Enter a note above to let folks know when you are using this system and when you
 <hr/>
 <li>
 <a href="code/" target="_new">View Sakai Source Code</a>
+<li>
+<a href="phpMyAdmin/" target="_new">View the Database</a>
 <hr/>
 <li><input type="submit" name="git_status" value="Git Status in Sakai Folder">
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
