@@ -1,10 +1,30 @@
-<html>
-<head>
-</head>
 <?php
 
 require_once "config.php";
 require_once "relativeTime.php";
+
+$secret = $CFG['unlock'] ?? '42';
+
+if ( isset($_POST['secret']) && ($_POST['secret'] == $secret ) ) {
+    setCookie('secret', $secret, time() + 15 * 3600 * 24);
+    header("Location: index.php");
+    return;
+} else if ( !isset($_COOKIE['secret']) || $_COOKIE['secret'] != $secret ) {
+?>
+<body style="font-family: Courier,monospace; width: 80%; max-width:500px;margin-left: auto; margin-right: auto;">
+<center>
+<h1>Sakai QA Dev Test Unlock</h1>
+<form method="post">
+<input type="text" name="secret">
+<input type="submit" value="Unlock">
+<p>
+<?php
+    return;
+}
+?><html>
+<head>
+</head>
+<?php
 
 date_default_timezone_set('America/Detroit');
 
