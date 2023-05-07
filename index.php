@@ -213,6 +213,9 @@ Enter a note above to let folks know when you are using this system and when you
 <form method="POST">
 <ul>
 <hr/>
+<li>
+<a href="code/" target="_new">View Sakai Source Code</a>
+<hr/>
 <li><input type="submit" name="git_status" value="Git Status in Sakai Folder">
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
 </li>
@@ -279,5 +282,11 @@ line numbers and nice highlight / select behavior seems to be costly when there 
 resetting a tail whilst a command is running will lose the rest of the output.  Just close the tab and re-open from
 time to time, or lect your browser be slugginsh for a bit :)
 </p>
+<p>
+The source code for this is available at:
+<ul>
+<li><a href="https://github.com/csev/devtest" target="_new">https://github.com/csev/devtest</a></li>
+<li><a href="https://github.com/csev/sakai-scripts" target="_new">https://github.com/csev/sakai-scripts</a></li>
+</ul>
 </body>
 </html>
