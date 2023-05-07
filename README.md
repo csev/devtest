@@ -32,6 +32,10 @@ Use the Tsugi dev environment to set up Apache, PHP, and PHPMyAdmin
     cd tsugi-build
     bash ubuntu/build-dev.sh
 
+Install some extra bits for phpMyAdmin:
+
+    apt install php-mysqli php-xml php-curl php-zip curl composer
+
 Configure the Tsugi bit:
 
     cp tsugi-build/ubuntu/ubuntu-env-demo.sh ubuntu-env.sh
@@ -70,6 +74,8 @@ Set up permissions on the `/var/www` so `www-data` can use it as a real log in f
 
     vi ~/.bashrc
     export PATH=.:$PATH
+    cd /var/www/html/phpMyAdmin/
+    composer update
 
 Do the rest as `www-data` using `su` as necessary to switch from `root` to `www-data`.
 Check out `sakai-scripts`:
