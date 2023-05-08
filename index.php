@@ -1,6 +1,6 @@
 <?php
 
-require_once "config.php";
+require_once "config-dist.php";
 require_once "relativeTime.php";
 
 $secret = $CFG['unlock'] ?? '42';
