@@ -214,15 +214,10 @@ pull down a new version.
 <button onclick="window.location.href='index.php';return false;">Go back to Checkout / Setup </button>
 </p>
 <p>
-<button onclick="window.open('code/','_blank');return false;">View Sakai Source Code</button>
-</p>
-<p>
-<button onclick="window.open('<?= $CFG["phpMyAdmin"] ?>','_blank');return false;">View the Database</button>
-</p>
-<hr/>
-<p>
 You can do the process below multiple times, if you want to change a property, stop Tomcat, change the property, and then
 re-start Tomcat.   After you have compiled Sakai once, there is no need to re-compile Sakai just to change a property.
+</p>
+<hr/>
 <form method="POST">
 <ul>
 <li>
@@ -256,6 +251,13 @@ You can also replace a property by entering a new line with a new value for the 
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
 </li>
 </ul>
+<hr/>
+<p>
+<button onclick="window.open('code/','_blank');return false;">View Sakai Source Code</button>
+</p>
+<p>
+<button onclick="window.open('<?= $CFG["phpMyAdmin"] ?>','_blank');return false;">View the Database</button>
+</p>
 </form>
 </body>
 </html>

@@ -207,6 +207,9 @@ if ( isset($_SESSION["repo_name"]) ) $repo_name = $_SESSION["repo_name"];
 <h1>Sakai Checkout / Set Up</h1>
 <form method="POST">
 <p>
+Use this page to check out the correct version of Sakai. Once you finish the setup on this page you can switch to the execution page.
+</p>
+<p>
 Last note update:
 <?php echo($lastupdate); ?>
 <br/>
@@ -218,13 +221,7 @@ Enter a note above to let folks know when you are using this system and when you
 <input type="submit" name="new_note" value="Update note">
 </p>
 </form>
-<p>
-Use this page to check out the correct version of Sakai. Once you finish the setup on this page you can switch to the execution page.
-</p>
-<p>
-<button onclick="window.location.href='execute.php';return false;">Switch to Compile / Execute </button>
 <hr/>
-</p>
 <form method="POST">
 <ul>
 <li><input type="submit" name="tomcat_stop" value="Stop Tomcat">
@@ -279,6 +276,10 @@ This will reset any properties you have added.
 -->
 </ul>
 </form>
+<hr/>
+<p>
+<button onclick="window.location.href='execute.php';return false;">Switch to Compile / Execute </button>
+</p>
 <p>
 The source code for this is available at:
 <ul>
