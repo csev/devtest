@@ -251,8 +251,13 @@ This will reset any properties you have added.
 </li>
 <hr/>
 <li><input type="submit" name="compile_sakai" value="Compile all of Sakai">
-(6 minutes)
+(5+ minutes)
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
+<p>
+Running tail on a large and rapidly growing file can slow your browser down.  If you wait, things will work themselves out.
+But if you want to use your browser while doing a compile or starting Tomcat, just close the tail tab, and check every 30 seconds
+or so by re-launching tail to see if it is done and then closing the tail tab.
+</p>
 </li>
 <hr/>
 <li>
@@ -266,9 +271,14 @@ Simply enter a line to be added to the file with the property name and its value
 </li>
 <hr/>
 <li><input type="submit" name="tomcat_start" value="Start Tomcat">
-(3 minutes)
+(3+ minutes)
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a> |
 <a href="tail.php?file=<?= $CFG['sakaihome'] ?>/apache-tomcat-9.0.21/logs/catalina.out" target="catalina">Tail catalina.out</a></li>
+<p>
+Running tail on a large and rapidly growing file can slow your browser down.  If you wait, things will work themselves out.
+But if you want to use your browser while doing a compile or starting Tomcat, just close the tail tab, and check every 30 seconds
+or so by re-launching tail to see if it is done and then closing the tail tab.
+</p>
 <li><a href="<?= $CFG['sakaiserver'] ?>" target="_new">Launch Sakai in a Browser</a>
 </li>
 <li><input type="submit" name="tomcat_stop" value="Stop Tomcat">
@@ -300,17 +310,6 @@ Simply enter a line to be added to the file with the property name and its value
 -->
 </ul>
 </form>
-<p>
-Running tail on a large and rapidly growing file can slow your browser down.  If you wait, things will work themselves out.
-But if you want to use your browser while doing a compile or starting Tomcat, just close the tail tab, and check every 30 seconds
-or so by re-launching tail to see if it is done and then closing the tail tab.
-</p>
-<p>
-Dynamically updating an &lt;ol&gt; tag to get pretty
-line numbers and nice highlight / select behavior seems to be costly when there are 20,000+ &lt;li&gt; tags in the list :).  And
-resetting a tail whilst a command is running will lose the rest of the output.  Just close the tab and re-open from
-time to time, or let your browser be slugginsh for a bit :)
-</p>
 <p>
 The source code for this is available at:
 <ul>
