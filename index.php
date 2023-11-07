@@ -251,7 +251,7 @@ This will reset any properties you have added.
 </li>
 <hr/>
 <li><input type="submit" name="compile_sakai" value="Compile all of Sakai">
-(5+ minutes)
+(7+ minutes)
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
 <p>
 Running tail on a large and rapidly growing file can slow your browser down.  If you wait, things will work themselves out.
@@ -271,7 +271,6 @@ Simply enter a line to be added to the file with the property name and its value
 </li>
 <hr/>
 <li><input type="submit" name="tomcat_start" value="Start Tomcat">
-(3+ minutes)
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a> |
 <a href="tail.php?file=<?= $CFG['sakaihome'] ?>/apache-tomcat-9.0.21/logs/catalina.out" target="catalina">Tail catalina.out</a></li>
 <p>
