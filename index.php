@@ -1,6 +1,11 @@
 <?php
 
+if ( file_exists("config.php") ) {
+require_once "config.php";
+} else {
 require_once "config-dist.php";
+}
+
 require_once "relativeTime.php";
 
 $secret = $CFG['unlock'] ?? '42';
@@ -57,6 +62,13 @@ if ( strlen($_POST['git_status'] ?? '') > 0 ) {
     return;
 }
 
+if ( strlen($_POST['git_log'] ?? '') > 0 ) {
+    $cmd = "cd ".$CFG['sakaihome']."; nohup ./wrap.sh 'cd trunk; pwd; git log -20 ' > /dev/null &";
+    execute($cmd);
+    header("Location: index.php");
+    return;
+}
+
 if ( strlen($_POST['git_branches'] ?? '') > 0 ) {
     $cmd = "cd ".$CFG['sakaihome']."; nohup ./wrap.sh 'cd trunk; pwd; git branch -a' > /dev/null &";
     execute($cmd);
@@ -80,13 +92,7 @@ if ( strlen($_POST['git_branch'] ?? '') > 0 && strlen($_POST['branch_name'] ?? '
 
 if ( strlen($_POST['git_repo'] ?? '') > 0 && strlen($_POST['repo_name'] ?? '') > 0 ) {
     $cmd = "cd ".$CFG['sakaihome']."; nohup ./wrap.sh 'bash co.sh ".$_POST['repo_name']."' > /dev/null &";
-    execute($cmd);
-    header("Location: index.php");
-    return;
-}
-
-if ( strlen($_POST['git_main'] ?? '') > 0 ) {
-    $cmd = "cd ".$CFG['sakaihome']."; nohup ./wrap.sh 'bash co.sh https://github.com/sakaiproject/sakai' > /dev/null &";
+    $_SESSION['repo_name'] = $_POST['repo_name'];
     execute($cmd);
     header("Location: index.php");
     return;
@@ -194,6 +200,8 @@ if ( strlen($_SESSION['success'] ?? '' ) > 0 ) {
     unset($_SESSION['success']);
 }
 
+$repo_name = "https://github.com/sakaiproject/sakai";
+if ( isset($_SESSION["repo_name"]) ) $repo_name = $_SESSION["repo_name"];
 ?>
 
 <h1>Sakai Test Harness</h1>
@@ -212,32 +220,38 @@ Enter a note above to let folks know when you are using this system and when you
 </form>
 <form method="POST">
 <ul>
+<p>If you are just starting up, run these commands to give yourself a fresh environment.
+You can watch the shell output to make sure that the commands complete before starting the
+next command.
+</p>
+<li><input type="submit" name="tomcat_stop" value="Stop Tomcat">
+(< 1 minute)
+<a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
+</li>
+<li><input type="submit" name="database_new" value="Reset the Database">
+(< 1 minute)
+<a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
+</li>
+<li><input type="submit" name="tomcat_new" value="Set up fresh Tomcat">
+This will reset any properties you have added.
+(< 1 minute)
+<a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
+</li>
 <hr/>
 <li>
-<a href="code/" target="_new">View Sakai Source Code</a>
-<li>
-<a href="phpMyAdmin/" target="_new">View the Database</a>
-<hr/>
+<input type="text" style="width:25%;" name="repo_name"  value="<?= htmlentities($repo_name) ?>">
+<input type="submit" name="git_repo" value="Checkout repository"> (2 minutes)
+<a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
+</li>
 <li><input type="submit" name="git_status" value="Git Status in Sakai Folder">
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
 </li>
-<li><input type="submit" name="git_branches" value="Show Branches in Sakai Folder">
+<li><input type="submit" name="git_log" value="Git Log in Sakai Folder">
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
 </li>
-<li><input type="submit" name="git_remotes" value="Show Remotes in Sakai Folder">
-<a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
-</li>
-<li><input type="submit" name="git_main" value="Checkout the main Sakai repository">
-<a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
-</li>
-<li>
-<input type="text" style="width:25%;" name="repo_name">
-<input type="submit" name="git_repo" value="Checkout repository">
-<a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
-</li>
-<li>
-<input type="text" style="width:25%;" name="branch_name">
-<input type="submit" name="git_branch" value="Checkout branch">
+<hr/>
+<li><input type="submit" name="compile_sakai" value="Compile all of Sakai">
+(6 minutes)
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
 </li>
 <hr/>
@@ -246,12 +260,13 @@ Enter a note above to let folks know when you are using this system and when you
 <br/>
 <input type="submit" name="change_property" value="Add/Update a sakai.property">
 <input type="text" style="width:50%" name="new_property">
-</li>
-<li><input type="submit" name="compile_sakai" value="Compile all of Sakai">
-<a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
+<p>
+Simply enter a line to be added to the file with the property name and its value.
+</p>
 </li>
 <hr/>
 <li><input type="submit" name="tomcat_start" value="Start Tomcat">
+(3 minutes)
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a> |
 <a href="tail.php?file=<?= $CFG['sakaihome'] ?>/apache-tomcat-9.0.21/logs/catalina.out" target="catalina">Tail catalina.out</a></li>
 <li><a href="<?= $CFG['sakaiserver'] ?>" target="_new">Launch Sakai in a Browser</a>
@@ -260,17 +275,29 @@ Enter a note above to let folks know when you are using this system and when you
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
 </li>
 <hr/>
-<li><input type="submit" name="tomcat_new" value="Set up fresh Tomcat">
-Make sure to stop Tomcat first.  This will resest any properties you have added.
+<li>
+<a href="code/" target="_new">View Sakai Source Code</a>
+</li>
+<li>
+<a href="<?= $CFG["phpMyAdmin"] ?>" target="_new">View the Database</a>
+</li>
+<li><input type="submit" name="git_remotes" value="Show Remotes in Sakai Folder">
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
 </li>
-<li><input type="submit" name="database_new" value="Reset the Database">
+<li><input type="submit" name="git_branches" value="Show Branches in Sakai Folder">
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
 </li>
+<li>
+<input type="text" style="width:25%;" name="branch_name">
+<input type="submit" name="git_branch" value="Checkout branch">
+<a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
+</li>
+<!--
 <hr/>
 <li><input type="submit" name="run_wrap_test" value="Run Simple Shell Test">
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
 </li>
+-->
 </ul>
 </form>
 <p>
@@ -282,7 +309,7 @@ or so by re-launching tail to see if it is done and then closing the tail tab.
 Dynamically updating an &lt;ol&gt; tag to get pretty
 line numbers and nice highlight / select behavior seems to be costly when there are 20,000+ &lt;li&gt; tags in the list :).  And
 resetting a tail whilst a command is running will lose the rest of the output.  Just close the tab and re-open from
-time to time, or lect your browser be slugginsh for a bit :)
+time to time, or let your browser be slugginsh for a bit :)
 </p>
 <p>
 The source code for this is available at:
