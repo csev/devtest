@@ -210,6 +210,10 @@ if ( isset($_SESSION["repo_name"]) ) $repo_name = $_SESSION["repo_name"];
 Use this page to check out the correct version of Sakai. Once you finish the setup on this page you can switch to the execution page.
 </p>
 <p>
+You can watch a
+<a href="https://youtu.be/_LDb57P5IQ8" target="_blank">demonstration video</a> to get a sense of how you can use this site.
+</p>
+<p>
 Last note update:
 <?php echo($lastupdate); ?>
 <br/>
