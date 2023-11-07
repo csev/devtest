@@ -213,16 +213,18 @@ pull down a new version.
 <p>
 <button onclick="window.location.href='index.php';return false;">Go back to Checkout / Setup </button>
 </p>
+<p>
+<button onclick="window.open('code/','_blank');return false;">View Sakai Source Code</button>
+</p>
+<p>
+<button onclick="window.open('<?= $CFG["phpMyAdmin"] ?>','_blank');return false;">View the Database</button>
+</p>
 <hr/>
+<p>
+You can do the process below multiple times, if you want to change a property, stop Tomcat, change the property, and then
+re-start Tomcat.   After you have compiled Sakai once, there is no need to re-compile Sakai just to change a property.
 <form method="POST">
 <ul>
-<li>
-<button onclick="window.open('code/','_blank');return false;">View Sakai Source Code</button>
-</li>
-<li>
-<button onclick="window.open('<?= $CFG["phpMyAdmin"] ?>','_blank');return false;">View the Database</button>
-</li>
-<hr/>
 <li>
 <input type="submit" name="compile_sakai" value="Compile all of Sakai">
 (7+ minutes)
@@ -230,13 +232,19 @@ pull down a new version.
 </li>
 <hr/>
 <li>
-<a href="tail.php?file=<?= $CFG['sakaihome'] ?>/apache-tomcat-9.0.21/sakai/sakai.properties" target="properties">View sakai.properties</a>
-<br/>
 <input type="submit" name="change_property" value="Add/Update a sakai.property">
 <input type="text" style="width:50%" name="new_property">
 <p>
-Simply enter a line to be added to the file with the property name and its value.
+Simply enter a line to be added to the file with the property name and its value. For example:
+<pre>
+portal.siteList.siteLabels=false
+</pre>
+You can only add or replace one property at a time
+You can also replace a property by entering a new line with a new value for the property.
 </p>
+</li>
+<li>
+<button onclick="window.open('tail.php?file=<?= $CFG['sakaihome'] ?>/apache-tomcat-9.0.21/sakai/sakai.properties','_blank');return false;">View sakai.properties</button>
 </li>
 <hr/>
 <li><input type="submit" name="tomcat_start" value="Start Tomcat">
@@ -249,11 +257,5 @@ Simply enter a line to be added to the file with the property name and its value
 </li>
 </ul>
 </form>
-<p>
-The source code for this is available at:
-<ul>
-<li><a href="https://github.com/csev/devtest" target="_new">https://github.com/csev/devtest</a></li>
-<li><a href="https://github.com/csev/sakai-scripts" target="_new">https://github.com/csev/sakai-scripts</a></li>
-</ul>
 </body>
 </html>
