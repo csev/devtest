@@ -5,6 +5,7 @@ $start = $_GET['start'] ?? 1;
 if ( $start < 1 ) $start = 1;
 $limit = $_GET['limit'] ?? 0;
 $file = $_GET['file'] ?? null;
+$large = ($_GET['large'] ?? null ) !== null;
 
 if ( !file_exists($file) ) die("File not found");
 
@@ -61,26 +62,31 @@ Auto Scroll: <input type="checkbox" checked id="scroll">
 </form>
   </header>
   <content>
+<?php if ( $large ) { ?>
+<pre id="tail">
+<?php } else { ?>
 <ol id="tail" start="<?= $start ?>">
-<?php
+<?php }
+
 $fp = fopen($file, 'r');
 $pos = 1;
 $shown = 0;
 
 while (($line = fgets($fp)) !== false) {
     if ( $pos >= $start ) {
-        echo('<li style="background-color: white;">');
+        if ( ! $large ) { echo('<li style="background-color: white;">'); }
         echo(trim($line));
         // https://css-tricks.com/fighting-the-space-between-inline-block-elements/
-        echo("<br/></li\n>");
+        if ( ! $large ) { echo("<br/></li\n>"); } else { echo("\n"); }
         $shown++;
     }
     $pos++;
     if ( $limit > 0 && $shown >= $limit ) break;
 
 }
+
+if ( $large ) { echo("\n</pre>\n"); } else { echo("\n</ol>\n"); }
 ?>
-</ol>
 <span id="the_end"></span>
 </content>
 </main>
@@ -92,10 +98,14 @@ function doTail() {
     .then(response => response.json())
     .then(data => {
       Object.keys(data.lines).forEach(function(key) {
+          const scroll = document.getElementById('scroll').checked;
+<?php if ( $large ) { ?>
+          document.getElementById("tail").append(data.lines[key]);
+          if ( scroll ) document.getElementById("the_end").scrollIntoView(false);
+<?php } else { ?>
           var temp = document.createElement('li');
           temp.innerText = data.lines[key];
 
-          const scroll = document.getElementById('scroll').checked;
           const str = document.getElementById('search').value;
           if ( str.length > 0 && temp.innerText.toLowerCase().includes(str.toLowerCase()) ) {
               temp.style.backgroundColor = 'green';
@@ -104,12 +114,14 @@ function doTail() {
           }
           document.getElementById("tail").appendChild(temp);
           if ( scroll ) temp.scrollIntoView(false);
+<?php } ?>
       })
       pos = data.next;
       setTimeout(doTail, 5000);
     });
 }
 setTimeout(doTail, 500);
+
 
 function doSearch() {
     const str = document.getElementById('search').value;

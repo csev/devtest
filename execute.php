@@ -12,7 +12,7 @@ $secret = $CFG['unlock'] ?? '42';
 
 if ( isset($_POST['secret']) && ($_POST['secret'] == $secret ) ) {
     setCookie('secret', $secret, time() + 15 * 3600 * 24);
-    header("Location: index.php");
+    header("Location: execute.php");
     return;
 } else if ( !isset($_COOKIE['secret']) || $_COOKIE['secret'] != $secret ) {
 ?>
@@ -51,42 +51,42 @@ function execute($cmd) {
 if ( strlen($_POST['run_wrap_test'] ?? '') > 0 ) {
     $cmd = "cd ".$CFG['sakaihome']." ; nohup ./wrap.sh 'wraptest.sh parm1' > /dev/null &";
     execute($cmd);
-    header("Location: index.php");
+    header("Location: execute.php");
     return;
 }
 
 if ( strlen($_POST['git_status'] ?? '') > 0 ) {
     $cmd = "cd ".$CFG['sakaihome']."; nohup ./wrap.sh 'cd trunk; pwd; git status' > /dev/null &";
     execute($cmd);
-    header("Location: index.php");
+    header("Location: execute.php");
     return;
 }
 
 if ( strlen($_POST['git_log'] ?? '') > 0 ) {
     $cmd = "cd ".$CFG['sakaihome']."; nohup ./wrap.sh 'cd trunk; pwd; git log -20 ' > /dev/null &";
     execute($cmd);
-    header("Location: index.php");
+    header("Location: execute.php");
     return;
 }
 
 if ( strlen($_POST['git_branches'] ?? '') > 0 ) {
     $cmd = "cd ".$CFG['sakaihome']."; nohup ./wrap.sh 'cd trunk; pwd; git branch -a' > /dev/null &";
     execute($cmd);
-    header("Location: index.php");
+    header("Location: execute.php");
     return;
 }
 
 if ( strlen($_POST['git_remotes'] ?? '') > 0 ) {
     $cmd = "cd ".$CFG['sakaihome']."; nohup ./wrap.sh 'cd trunk; pwd; git remote -v' > /dev/null &";
     execute($cmd);
-    header("Location: index.php");
+    header("Location: execute.php");
     return;
 }
 
 if ( strlen($_POST['git_branch'] ?? '') > 0 && strlen($_POST['branch_name'] ?? '') > 0 ) {
     $cmd = "cd ".$CFG['sakaihome']."; nohup ./wrap.sh 'cd trunk; pwd; git fetch origin ".$_POST['branch_name'].":".$_POST['branch_name']."; git checkout ".$_POST['branch_name']."' > /dev/null &";
     execute($cmd);
-    header("Location: index.php");
+    header("Location: execute.php");
     return;
 }
 
@@ -94,48 +94,48 @@ if ( strlen($_POST['git_repo'] ?? '') > 0 && strlen($_POST['repo_name'] ?? '') >
     $cmd = "cd ".$CFG['sakaihome']."; nohup ./wrap.sh 'bash co.sh ".$_POST['repo_name']."' > /dev/null &";
     $_SESSION['repo_name'] = $_POST['repo_name'];
     execute($cmd);
-    header("Location: index.php");
+    header("Location: execute.php");
     return;
 }
 
 if ( strlen($_POST['note'] ?? '') > 0 ) {
     file_put_contents("note.txt", $_POST['note']);
-    header("Location: index.php");
+    header("Location: execute.php");
     return;
 }
 
 if ( strlen($_POST['tomcat_stop'] ?? '') > 0 ) {
     $cmd = "cd ".$CFG['sakaihome']." ; nohup ./wrap.sh stop.sh > /dev/null &";
     execute($cmd);
-    header("Location: index.php");
+    header("Location: execute.php");
     return;
 }
 
 if ( strlen($_POST['tomcat_start'] ?? '') > 0 ) {
     $cmd = "cd ".$CFG['sakaihome']." ; nohup ./wrap.sh start.sh > /dev/null &";
     execute($cmd);
-    header("Location: index.php");
+    header("Location: execute.php");
     return;
 }
 
 if ( strlen($_POST['tomcat_new'] ?? '') > 0 ) {
     $cmd = "cd ".$CFG['sakaihome']." ; nohup ./wrap.sh na.sh > /dev/null &";
     execute($cmd);
-    header("Location: index.php");
+    header("Location: execute.php");
     return;
 }
 
 if ( strlen($_POST['compile_sakai'] ?? '') > 0 ) {
     $cmd = "cd ".$CFG['sakaihome']." ; nohup ./wrap.sh qmv.sh > /dev/null &";
     execute($cmd);
-    header("Location: index.php");
+    header("Location: execute.php");
     return;
 }
 
 if ( strlen($_POST['database_new'] ?? '') > 0 ) {
     $cmd = "cd ".$CFG['sakaihome']." ; nohup ./wrap.sh db.sh > /dev/null &";
     execute($cmd);
-    header("Location: index.php");
+    header("Location: execute.php");
     return;
 }
 
@@ -145,14 +145,14 @@ if ( strlen($_POST['new_property'] ?? '') > 0 && strlen($_POST['change_property'
 
     if ( ! ($pos >= 1) ) {
         $_SESSION['error'] = "property=value required.";
-        header("Location: index.php");
+        header("Location: execute.php");
         return;
     }
 
     $propfile = $CFG['sakaihome'] . '/apache-tomcat-9.0.21/sakai/sakai.properties';
     if ( ! file_exists($propfile) ) {
         $_SESSION['error'] = "Could not load: ".$propfile;
-        header("Location: index.php");
+        header("Location: execute.php");
         return;
     }
 
@@ -179,7 +179,7 @@ if ( strlen($_POST['new_property'] ?? '') > 0 && strlen($_POST['change_property'
     // echo("<pre>\n");echo($props);echo("\n</pre>\n");
     file_put_contents($propfile, $props);
 
-    header("Location: index.php");
+    header("Location: execute.php");
     return;
 }
 
@@ -204,79 +204,49 @@ $repo_name = "https://github.com/sakaiproject/sakai";
 if ( isset($_SESSION["repo_name"]) ) $repo_name = $_SESSION["repo_name"];
 ?>
 
-<h1>Sakai Checkout / Set Up</h1>
-<form method="POST">
+<h1>Compile / Execute</h1>
 <p>
-Last note update:
-<?php echo($lastupdate); ?>
-<br/>
-<textarea name="note" style="width:70%;">
-<?php echo(htmlentities($note)); ?>
-</textarea>
-<br/>
-Enter a note above to let folks know when you are using this system and when you will be done.
-<input type="submit" name="new_note" value="Update note">
-</p>
-</form>
-<p>
-Use this page to check out the correct version of Sakai. Once you finish the setup on this page you can switch to the execution page.
+You use this page to configure Sakai, compile Sakai, start Sakai and then test your instance of Sakai.
+If you want to switch to a different version of Sakai go back to the check out page and
+pull down a new version.
 </p>
 <p>
-<button onclick="window.location.href='execute.php';return false;">Switch to Compile / Execute </button>
+<button onclick="window.location.href='index.php';return false;">Go back to Checkout / Setup </button>
+</p>
 <hr/>
-</p>
 <form method="POST">
 <ul>
-<li><input type="submit" name="tomcat_stop" value="Stop Tomcat">
-(< 1 minute)
-<a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
-</li>
 <li>
-<input type="submit" name="tomcat_new" value="Set up fresh Tomcat">
-This will reset any properties you have added.
-(< 1 minute)
-<a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
-</li>
-<li><input type="submit" name="database_new" value="(optional) Reset the Database">
-(< 1 minute)
-<a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
+<button onclick="window.open('code/','_blank');return false;">View Sakai Source Code</button>
 </li>
 <li>
 <button onclick="window.open('<?= $CFG["phpMyAdmin"] ?>','_blank');return false;">View the Database</button>
 </li>
 <hr/>
 <li>
-<input type="text" style="width:25%;" name="repo_name"  value="<?= htmlentities($repo_name) ?>">
-<input type="submit" name="git_repo" value="Checkout repository"> (2 minutes)
-<a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
-</li>
-<li>
-<button onclick="window.open('code/','_blank');return false;">View Sakai Source Code</button>
-</li>
-<li><input type="submit" name="git_status" value="Git Status in Sakai Folder">
-<a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
-</li>
-<li><input type="submit" name="git_log" value="Git Log in Sakai Folder">
-<a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
+<input type="submit" name="compile_sakai" value="Compile all of Sakai">
+(7+ minutes)
+<a href="tail.php?file=/tmp/shellout&large=true" target="shell">Tail shell output</a>
 </li>
 <hr/>
-<li><input type="submit" name="git_remotes" value="Show Remotes in Sakai Folder">
-<a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
-</li>
-<li><input type="submit" name="git_branches" value="Show Branches in Sakai Folder">
-<a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
-</li>
 <li>
-<input type="text" style="width:25%;" name="branch_name">
-<input type="submit" name="git_branch" value="Checkout branch">
-<a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
+<a href="tail.php?file=<?= $CFG['sakaihome'] ?>/apache-tomcat-9.0.21/sakai/sakai.properties" target="properties">View sakai.properties</a>
+<br/>
+<input type="submit" name="change_property" value="Add/Update a sakai.property">
+<input type="text" style="width:50%" name="new_property">
+<p>
+Simply enter a line to be added to the file with the property name and its value.
+</p>
 </li>
-<!--
 <hr/>
-<li><input type="submit" name="run_wrap_test" value="Run Simple Shell Test">
+<li><input type="submit" name="tomcat_start" value="Start Tomcat">
+<a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a> |
+<a href="tail.php?file=<?= $CFG['sakaihome'] ?>/apache-tomcat-9.0.21/logs/catalina.out&large=true" target="catalina">Tail catalina.out</a></li>
+<button onclick="window.open('<?= $CFG["sakaiserver"] ?>','_blank');return false;">Launch Sakai in a Browser</button>
+</li>
+<li><input type="submit" name="tomcat_stop" value="Stop Tomcat">
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
 </li>
--->
 </ul>
 </form>
 <p>
