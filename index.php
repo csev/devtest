@@ -28,6 +28,10 @@ if ( isset($_POST['secret']) && ($_POST['secret'] == $secret ) ) {
 }
 ?><html>
 <head>
+    
+    <!-- Simple CSS automatically enhances HTML with a cleaner, more aesthetically pleasing look without any additional styling needed -->
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    
 </head>
 <?php
 
