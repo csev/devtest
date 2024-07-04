@@ -253,7 +253,7 @@ This will reset any properties you have added.
 <li>
 <input type="text" style="width:25%;" name="repo_name"  value="<?= htmlentities($repo_name) ?>">
 <input type="submit" name="git_repo" value="Checkout repository"> (2 minutes)
-<a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
+<a href="longtail.php?file=/tmp/shellout" target="shell">Tail shell output</a>
 </li>
 <li>
 <button onclick="window.open('code/','_blank');return false;">View Sakai Source Code</button>

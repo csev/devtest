@@ -17,6 +17,17 @@ if ( $file == "/tmp/shellout" && strlen($_POST['reset_shell_out'] ?? '') > 0 ) {
     return;
 }
 
+// This just craps out once a file gets too big potentially hanging Apache
+// so check line count first
+$fp = fopen($file, 'r');
+$lines = 0;
+while (($line = fgets($fp)) !== false) $lines++;
+fclose($fp);
+
+if ( $lines > 2000 ) {
+    header("Location: longtail.php?file=".$file);
+    return;
+}
 
 ?>
 <style>

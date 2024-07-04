@@ -223,7 +223,7 @@ re-start Tomcat.   After you have compiled Sakai once, there is no need to re-co
 <li>
 <input type="submit" name="compile_sakai" value="Compile all of Sakai">
 (7+ minutes)
-<a href="tail.php?file=/tmp/shellout&large=true" target="shell">Tail shell output</a>
+<a href="longtail.php?file=/tmp/shellout&large=true" target="shell">Tail shell output</a>
 </li>
 <hr/>
 <li>
@@ -244,7 +244,7 @@ You can also replace a property by entering a new line with a new value for the 
 <hr/>
 <li><input type="submit" name="tomcat_start" value="Start Tomcat">
 <a href="tail.php?file=/tmp/shellout" target="shell">Tail shell output</a> |
-<a href="tail.php?file=<?= $CFG['sakaihome'] ?>/apache-tomcat-9.0.21/logs/catalina.out&large=true" target="catalina">Tail catalina.out</a></li>
+<a href="longtail.php?file=<?= $CFG['sakaihome'] ?>/apache-tomcat-9.0.21/logs/catalina.out&large=true" target="catalina">Tail catalina.out</a></li>
 <button onclick="window.open('<?= $CFG["sakaiserver"] ?>','_blank');return false;">Launch Sakai in a Browser</button>
 </li>
 <li><input type="submit" name="tomcat_stop" value="Stop Tomcat">
