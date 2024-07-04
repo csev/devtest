@@ -39,7 +39,8 @@ header {
 <form method="POST">
 This file is too large to dynamicaly monitor so you will need to refresh the page to see updates.<br/>
 <input type="submit" onclick=";window.location.reload(true)return false;" value="Reload page"/>
-<input type="submit" onclick="document.getElementById('the_end').scrollIntoView(false);return false;" value="Go to the bottom"/>
+<input type="submit" onclick="document.getElementById('the_beginning').scrollIntoView(false);return false;" value="Goto top"/>
+<input type="submit" onclick="document.getElementById('the_end').scrollIntoView(false);return false;" value="Goto bottom"/>
 <?php if ( $file == "/tmp/shellout" ) { ?>
 <input type="submit" name="reset_shell_out" value="Reset Output">
 <?php } ?>
@@ -64,21 +65,12 @@ echo("\n");
 echo("Lines: $lines \n");
 ?>
 </pre>
-<hr/>
-<p>
-<form method="POST">
-This file is too large to dynamicaly monitor so you will need to refresh the page to see updates.<br/>
-<input type="submit" onclick=";window.location.reload(true)return false;" value="Reload page"/>
-<input type="submit" onclick="document.getElementById('the_top').scrollIntoView(false);return false;" value="Go to the top"/>
-<?php if ( $file == "/tmp/shellout" ) { ?>
-<input type="submit" name="reset_shell_out" value="Reset Output">
-<?php } ?>
-  File: <?= htmlentities($file) ?>
-</form>
-</p>
 <span id="the_end"></span>
 </content>
 </main>
+<script>
+document.getElementById('the_end').scrollIntoView(false);
+</script>
 </body>
 </html>
 
