@@ -5,6 +5,14 @@ $file = $_GET['file'] ?? null;
 
 if ( !file_exists($file) ) die("File not found");
 
+if ( $file == "/tmp/shellout" && strlen($_POST['reset_shell_out'] ?? '') > 0 ) {
+    exec("rm /tmp/shellout");
+    exec("touch /tmp/shellout");
+    $_SESSION['success'] = "Shell output reset, make sure to reset your tail of shell output";
+    header("Location: tail.php?file=".$file);
+    return;
+}
+
 ?>
 <style>
 ol {
